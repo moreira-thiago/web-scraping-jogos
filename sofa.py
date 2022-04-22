@@ -7,7 +7,6 @@ from time import sleep
 from selenium.webdriver.common.by import By
 import csv
 import pandas as pd
-#url = "https://www.flashscore.com.br/futebol/inglaterra/campeonato-ingles/classificacao/"
 
 with open('links_classificação.txt') as f:
     url_content = f.readlines()
@@ -49,7 +48,6 @@ for i in range(len(url_content)):
      forma_03 = [linha[2:-2] for linha in conjunto_forma_times] 
      forma_04 = [linha[3:-1] for linha in conjunto_forma_times] 
      forma_05 = [linha[4:] for linha in conjunto_forma_times] 
-
 
      for i in range(len(conjunto_nomes)):
           print(prefixo_nome,";",conjunto_posicao_time[i],";",conjunto_nomes[i],";",gol_pro[i],";",gol_contra[i],";",conjunto_pontos[i],";",forma_01[i],";",forma_02[i],";",forma_03[i],";",forma_04[i],";",forma_05[i])
