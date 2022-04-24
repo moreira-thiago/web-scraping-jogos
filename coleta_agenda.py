@@ -4,7 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
-url = "https://www.flashscore.com.br/futebol/inglaterra/campeonato-ingles/calendario"
+#url = "https://www.flashscore.com.br/futebol/inglaterra/campeonato-ingles/calendario"
 option = Options()
 option.headless = True
 driver = webdriver.Chrome(options=option)
@@ -26,4 +26,4 @@ conjunto_time_fora= [linha.get_text() for linha in  jogos.find_all(class_='event
 
 for i in range(len(conjunto_time_casa)):
      print(prefixo_nome,";",conjunto_dia_jogo[i],";",conjunto_time_casa[i],";",conjunto_time_fora[i])
- 
+ writer.writerow([prefixo_nome,conjunto_posicao_time[i],conjunto_nomes[i],gol_pro[i],gol_contra[i],conjunto_pontos[i],forma_01[i],forma_02[i],forma_03[i],forma_04[i],forma_05[i]])
