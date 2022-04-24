@@ -25,5 +25,6 @@ conjunto_time_casa= [linha.get_text() for linha in  jogos.find_all(class_='event
 conjunto_time_fora= [linha.get_text() for linha in  jogos.find_all(class_='event__participant--away')]
 
 for i in range(len(conjunto_time_casa)):
+     print(prefixo_nome,";",conjunto_dia_jogo[i],";",conjunto_time_casa[i],";",conjunto_time_fora[i]) 
      print(prefixo_nome,";",conjunto_dia_jogo[i],";",conjunto_time_casa[i],";",conjunto_time_fora[i])
  
