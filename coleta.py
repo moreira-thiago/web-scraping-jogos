@@ -15,15 +15,10 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
 
 # Faz a leitura da lista de campeonatos que será feito a raspagem
+# Exemplo "https://www.flashscore.com.br/futebol/alemanha/bundesliga/"
 with open('lista_url.txt') as f:
     url_content = f.readlines()
 url_content = [x.rstrip('\n') for x in url_content] 
-
-# writer = pd.ExcelWriter('meus_dados.xlsx', engine='xlsxwriter')
-# excel = pd.ExcelWriter('NOME_DO_ARQUIVO.xlsx', engine='xlsxwriter')
-# file = open("Agenda.csv",'w', newline='')
-# writer = csv.writer(file,delimiter=';')
-# writer.writerow(['País / Liga','Data', 'Hora','Time da Casa', 'Time Visitante'])
 
 
 # Recebe a dta atual do sistema e converte para o fomato dd/mm/yyyy
@@ -36,10 +31,7 @@ dados_tabela = pd.DataFrame ( columns =['Pais \ Liga',  'Nome', 'Posição', 'Po
 for i in range(len(url_content)):
     url_classificacao= (url_content[i]+'classificacao')
     url_calendario = (url_content[i]+'calendario')
-    #option = Options()
-    #option.headless = False
-    #option.headless = True
-    #driver = webdriver.Chrome(options=option)
+
 
     driver.get(url_calendario)
     sleep(1)
@@ -64,9 +56,6 @@ for i in range(len(url_content)):
 
     data_jogo = [linha[:-5] for linha in final_str]
     hora_jogo = [linha[8:] for linha in final_str]
-
-
-
 
     driver.get(url_classificacao)
     sleep(1)
@@ -97,16 +86,13 @@ for i in range(len(url_content)):
         data_jogo_format =[datetime.strptime(x,'%d/%m/%y') for x in data_jogo]
         data_atual = datetime.strptime(data_em_texto, '%d/%m/%Y')
         quantidade_dias = abs(( data_jogo_format[i]-data_atual).days)
-        #print(prefixo_nome,";",data_jogo[i],";",hora_jogo[i],";",conjunto_time_casa[i],";",conjunto_time_fora[i])
+        
         if quantidade_dias <= 8:
-            #print(prefixo_nome,";",data_jogo[i],";",hora_jogo[i],";",conjunto_time_casa[i],";",conjunto_time_fora[i])
             dados_jogos = dados_jogos.append({'Pais \ Liga': prefixo_nome, 'Data': data_jogo[i], 'Hora': hora_jogo[i], 'Casa': conjunto_time_casa[i], 'Visitante': conjunto_time_fora[i]}, ignore_index=True)
-            #writer.writerow([prefixo_nome,data_jogo[i],hora_jogo[i],conjunto_time_casa[i],conjunto_time_fora[i]])
+
 
 
     for i in range(len(conjunto_nomes)):
-        #print(prefixo_nome,";",conjunto_posicao_time[i],";",conjunto_nomes[i],";",gol_pro[i],";",gol_contra[i],";",conjunto_pontos[i],";",forma_01[i],";",forma_02[i],";",forma_03[i],";",forma_04[i],";",forma_05[i])
-        #writer.writerow([prefixo_nome,conjunto_nomes[i],conjunto_posicao_time[i],conjunto_pontos[i],gol_pro[i],gol_contra[i],forma_01[i],forma_02[i],forma_03[i],forma_04[i],forma_05[i]])
         dados_tabela = dados_tabela.append({'Pais \ Liga': prefixo_nome, 'Nome':conjunto_nomes[i] , 'Posição':conjunto_posicao_time[i] ,'Pontos':conjunto_pontos[i], 'Gol Pro':gol_pro[i] , 'Gol Contra':conjunto_pontos[i], 'F01':forma_01[i], 'F02':forma_02[i], 'F03':forma_03[i], 'F04':forma_04[i], 'F05':forma_05[i]}, ignore_index=True)
     
     
@@ -127,10 +113,8 @@ tabela_final = dados_tabela_final[['Pais \ Liga', 'Data', 'Hora', 'Casa', 'P_c',
 # Usando o ExcelWriter, cria um doc .xlsx, usando engine='xlsxwriter'
 writer = pd.ExcelWriter('coleta.xlsx', engine='xlsxwriter')
 
-# Armazena cada df em uma planilha diferente do mesmo arquivo
+# Armazena dataframe em uma planilha 
 tabela_final.to_excel(writer, sheet_name='Dados Finais')
-
-
 
 # Fecha o ExcelWriter e gera o arquivo .xlsx
 writer.save()
